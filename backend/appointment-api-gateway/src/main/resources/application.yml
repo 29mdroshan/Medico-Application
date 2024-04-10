@@ -1,0 +1,54 @@
+spring:
+  application:
+    name: appointment-api-gateway
+  cloud:
+    gateway:
+      routes:
+      - id: appointment-admin-service
+        uri:
+         lb://appointment-admin-service
+        predicates:
+        - Path=/admin/**
+        
+      - id: appointment-doctor-service
+        uri:
+         lb://appointment-doctor-service 
+        predicates:
+        - Path=/doctor/**
+        
+      - id: patient-book-appointment
+        uri:
+         lb://patient-book-appointment
+        predicates:
+        - Path=/bookapp/** 
+        
+      - id: patient-register
+        uri:
+         lb://patient-register
+        predicates:
+        - Path=/patient/** 
+        
+      - id: appointment-auth-service
+        uri:
+         lb://appointment-auth-service
+        predicates:
+        - Path=/authenticate/** 
+        
+        
+      - id: appointment-email-service
+        uri:
+         lb://appointment-email-service
+        predicates:
+        - Path=/sendMail/** 
+        
+       
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials, RETAIN_UNIQUE
+      globalcors:
+          cors-configurations:
+            '[/**]':
+              allowed-origins: "*"
+              allowed-methods: "*"
+              allowed-headers: "*"
+server:
+  port: 8888
